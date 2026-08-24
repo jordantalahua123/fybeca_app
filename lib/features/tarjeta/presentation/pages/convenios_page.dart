@@ -5,6 +5,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../domain/entities/convenio_entity.dart';
 import '../bloc/convenios/convenios_bloc.dart';
+import '../widgets/virtual_card.dart';
 
 /// Contenido de la pestaña "Convenios" dentro de [MainShell]. Comparte el
 /// mismo [ConveniosBloc] que la pestaña Inicio (provisto por el shell); no
@@ -106,59 +107,44 @@ class _ConvenioCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(20),
       onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: selected ? AppColors.primaryNavy : AppColors.border,
-            width: selected ? 1.5 : 1,
+      child: Stack(
+        children: [
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 150),
+            padding: const EdgeInsets.all(3),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: selected ? AppColors.primaryNavy : Colors.transparent,
+                width: 2.5,
+              ),
+            ),
+            child: VirtualCard.forConvenio(convenio),
           ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  convenio.etiqueta.toUpperCase(),
-                  style: AppTextStyles.caption.copyWith(
-                    color: AppColors.mutedBlueGray,
-                    fontWeight: FontWeight.w600,
-                  ),
+          if (!selected)
+            Positioned.fill(
+              child: Container(
+                margin: const EdgeInsets.all(3),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(18),
+                  color: AppColors.textPrimary.withValues(alpha: 0.18),
                 ),
-                Icon(
-                  selected ? Icons.check_circle : Icons.circle_outlined,
-                  color: selected ? AppColors.primaryNavy : AppColors.border,
-                  size: 22,
-                ),
-              ],
+              ),
             ),
-            const SizedBox(height: 6),
-            Text(convenio.nombre, style: AppTextStyles.title),
-            Text(
-              convenio.tarjetaEnmascarada,
-              style: AppTextStyles.bodySecondary,
+          Positioned(
+            top: 10,
+            right: 10,
+            child: Icon(
+              selected ? Icons.check_circle : Icons.circle_outlined,
+              color: selected
+                  ? AppColors.white
+                  : AppColors.white.withValues(alpha: 0.75),
+              size: 22,
             ),
-            const Divider(height: 24),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Cupo disponible', style: AppTextStyles.caption),
-                Text(
-                  '\$${convenio.cupoDisponible.toStringAsFixed(2)}',
-                  style: AppTextStyles.title.copyWith(
-                    color: AppColors.primaryNavy,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

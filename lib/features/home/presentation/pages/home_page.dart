@@ -52,6 +52,7 @@ class HomePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     VirtualCard(
+                      brand: CardBrand.fybeca,
                       tag: 'Empresarial',
                       maskedNumber: '•••• •••• •••• 5218',
                       cupoDisponible: loaded.cupoTotal,

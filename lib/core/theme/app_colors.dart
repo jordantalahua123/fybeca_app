@@ -5,13 +5,23 @@ import 'package:flutter/material.dart';
 class AppColors {
   AppColors._();
 
-  // Marca
+  // Marca (Fybeca)
   static const Color primaryNavy = Color(0xFF203A5D);
   static const Color primaryBlue = Color(0xFF2558A4);
   static const Color accentCyan = Color(0xFF00C7EB);
   static const Color brandRed = Color(0xFFE40520);
   static const Color brandOrange = Color(0xFFFF8700);
   static const Color brandGreen = Color(0xFF0B6040);
+
+  // Marca (Sana Sana — verde extraído de sanasana.com.ec: CSS de producción
+  // #007938/#7FAE27 + muestreo de píxeles del favicon oficial #70B544)
+  static const Color sanaSanaGreen = Color(0xFF007938);
+  static const Color sanaSanaLightGreen = Color(0xFF7FAE27);
+
+  // Marca (Tarjeta de Empleados — identidad neutra del grupo corporativo,
+  // no de una farmacia específica: grafito con acentos plateados)
+  static const Color employeeGraphite = Color(0xFF2B2E33);
+  static const Color employeeSteel = Color(0xFFB9C2CC);
 
   // Neutros
   static const Color textPrimary = Color(0xFF212529);
