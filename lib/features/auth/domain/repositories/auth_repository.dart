@@ -3,24 +3,14 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../entities/user_entity.dart';
 
-/// Contrato que la capa de datos debe cumplir. El dominio y la presentación
-/// (BLoC) solo dependen de esta interfaz: hoy la implementa un mock local,
-/// mañana un cliente REST contra el backend Spring Boot, sin tocar nada aquí.
+/// Contrato que la capa de datos debe cumplir. Hoy lo implementa un mock
+/// local; cuando el backend Spring Boot esté listo, se reemplaza la
+/// implementación sin tocar dominio ni presentación.
 abstract class AuthRepository {
-  Future<Either<Failure, UserEntity>> loginWithEmailAndPassword({
-    required String email,
+  Future<Either<Failure, UserEntity>> loginWithIdentification({
+    required String identification,
     required String password,
   });
-
-  Future<Either<Failure, UserEntity>> registerWithEmailAndPassword({
-    required String name,
-    required String email,
-    required String password,
-  });
-
-  Future<Either<Failure, UserEntity>> loginWithGoogle();
-
-  Future<Either<Failure, UserEntity>> loginWithMicrosoft();
 
   Future<Either<Failure, UserEntity>> getCurrentUser();
 

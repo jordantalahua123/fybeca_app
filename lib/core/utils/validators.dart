@@ -24,7 +24,10 @@ class Validators {
     return null;
   }
 
-  static String? notEmpty(String? value, {String message = 'Este campo es obligatorio.'}) {
+  static String? notEmpty(
+    String? value, {
+    String message = 'Este campo es obligatorio.',
+  }) {
     if (value == null || value.trim().isEmpty) {
       return message;
     }

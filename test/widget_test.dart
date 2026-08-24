@@ -12,11 +12,13 @@ void main() {
     sl.reset();
   });
 
-  testWidgets('Muestra la pantalla de login cuando no hay sesión activa', (tester) async {
+  testWidgets('Muestra la pantalla de login cuando no hay sesión activa', (
+    tester,
+  ) async {
     await tester.pumpWidget(const FybecaApp());
     await tester.pumpAndSettle();
 
-    expect(find.text('Iniciar sesión'), findsOneWidget);
-    expect(find.text('Bienvenido de nuevo'), findsOneWidget);
+    expect(find.text('Ingresar a mi cuenta'), findsOneWidget);
+    expect(find.text('Ingresa a tus tarjetas'), findsOneWidget);
   });
 }

@@ -12,37 +12,17 @@ class AuthCheckRequested extends AuthEvent {
   const AuthCheckRequested();
 }
 
-class AuthLoginWithEmailRequested extends AuthEvent {
-  final String email;
+class AuthLoginRequested extends AuthEvent {
+  final String identification;
   final String password;
 
-  const AuthLoginWithEmailRequested({required this.email, required this.password});
-
-  @override
-  List<Object?> get props => [email, password];
-}
-
-class AuthRegisterRequested extends AuthEvent {
-  final String name;
-  final String email;
-  final String password;
-
-  const AuthRegisterRequested({
-    required this.name,
-    required this.email,
+  const AuthLoginRequested({
+    required this.identification,
     required this.password,
   });
 
   @override
-  List<Object?> get props => [name, email, password];
-}
-
-class AuthLoginWithGoogleRequested extends AuthEvent {
-  const AuthLoginWithGoogleRequested();
-}
-
-class AuthLoginWithMicrosoftRequested extends AuthEvent {
-  const AuthLoginWithMicrosoftRequested();
+  List<Object?> get props => [identification, password];
 }
 
 class AuthLogoutRequested extends AuthEvent {

@@ -7,11 +7,8 @@ import '../../../../core/utils/validators.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_logo.dart';
 import '../../../../core/widgets/app_text_field.dart';
-import '../../../../core/widgets/brand_icons.dart';
+import '../../data/datasources/auth_remote_data_source.dart';
 import '../bloc/auth_bloc.dart';
-import '../widgets/auth_divider.dart';
-import '../widgets/social_login_button.dart';
-import 'register_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -22,31 +19,37 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
+  final _identificationController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
 
   @override
   void dispose() {
-    _emailController.dispose();
+    _identificationController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  void _fillDemoAccess() {
+    _identificationController.text = AuthMockDataSource.demoIdentification;
+    _passwordController.text = AuthMockDataSource.demoPassword;
   }
 
   void _submit() {
     if (_formKey.currentState?.validate() ?? false) {
       context.read<AuthBloc>().add(
-            AuthLoginWithEmailRequested(
-              email: _emailController.text,
-              password: _passwordController.text,
-            ),
-          );
+        AuthLoginRequested(
+          identification: _identificationController.text.trim(),
+          password: _passwordController.text,
+        ),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.primaryNavy,
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthFailureState) {
@@ -58,100 +61,163 @@ class _LoginPageState extends State<LoginPage> {
         child: SafeArea(
           child: Center(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 32),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 420),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const Center(child: AppLogo()),
-                      const SizedBox(height: 8),
-                      Center(
-                        child: Text(
-                          'Bienvenido de nuevo',
-                          style: AppTextStyles.bodySecondary,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Center(child: AppLogo(scale: 1.15)),
+                    const SizedBox(height: 6),
+                    Text(
+                      'Tu cupo empresarial, siempre contigo.',
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.body.copyWith(
+                        color: AppColors.white.withValues(alpha: 0.85),
+                      ),
+                    ),
+                    const SizedBox(height: 28),
+                    Container(
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border(
+                          top: BorderSide(color: AppColors.brandRed, width: 4),
                         ),
                       ),
-                      const SizedBox(height: 36),
-                      AppTextField(
-                        controller: _emailController,
-                        label: 'Correo electrónico',
-                        keyboardType: TextInputType.emailAddress,
-                        validator: Validators.email,
-                        prefixIcon: const Icon(Icons.mail_outline),
-                      ),
-                      const SizedBox(height: 16),
-                      AppTextField(
-                        controller: _passwordController,
-                        label: 'Contraseña',
-                        obscureText: _obscurePassword,
-                        validator: Validators.password,
-                        textInputAction: TextInputAction.done,
-                        prefixIcon: const Icon(Icons.lock_outline),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                          ),
-                          onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      BlocBuilder<AuthBloc, AuthState>(
-                        builder: (context, state) {
-                          return AppButton(
-                            label: 'Iniciar sesión',
-                            isLoading: state is AuthLoading,
-                            onPressed: _submit,
-                          );
-                        },
-                      ),
-                      const SizedBox(height: 24),
-                      const AuthDivider(),
-                      const SizedBox(height: 20),
-                      SocialLoginButton(
-                        icon: const GoogleLogo(),
-                        label: 'Continuar con Google',
-                        onPressed: () =>
-                            context.read<AuthBloc>().add(const AuthLoginWithGoogleRequested()),
-                      ),
-                      const SizedBox(height: 12),
-                      SocialLoginButton(
-                        icon: const MicrosoftLogo(),
-                        label: 'Continuar con Microsoft',
-                        onPressed: () =>
-                            context.read<AuthBloc>().add(const AuthLoginWithMicrosoftRequested()),
-                      ),
-                      const SizedBox(height: 28),
-                      Wrap(
-                        alignment: WrapAlignment.center,
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        children: [
-                          Text('¿No tienes cuenta?', style: AppTextStyles.bodySecondary),
-                          TextButton(
-                            style: TextButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(horizontal: 6),
-                              minimumSize: Size.zero,
-                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              'BIENVENIDO',
+                              style: AppTextStyles.caption.copyWith(
+                                color: AppColors.brandRed,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 1,
+                              ),
                             ),
-                            onPressed: () => Navigator.of(context).push(
-                              MaterialPageRoute(builder: (_) => const RegisterPage()),
+                            const SizedBox(height: 6),
+                            Text(
+                              'Ingresa a tus tarjetas',
+                              style: AppTextStyles.headline,
                             ),
-                            child: const Text('Regístrate'),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      Center(
-                        child: Text(
-                          'Cuenta de prueba: demo@fybeca.com / 123456',
-                          style: AppTextStyles.caption.copyWith(color: AppColors.mutedBlueGray),
-                          textAlign: TextAlign.center,
+                            const SizedBox(height: 4),
+                            Text(
+                              'Usa las credenciales asociadas a tu convenio empresarial.',
+                              style: AppTextStyles.bodySecondary,
+                            ),
+                            const SizedBox(height: 24),
+                            AppTextField(
+                              controller: _identificationController,
+                              label: 'Número de identificación',
+                              keyboardType: TextInputType.number,
+                              validator: (v) => Validators.notEmpty(
+                                v,
+                                message: 'Ingresa tu cédula.',
+                              ),
+                              prefixIcon: const Icon(Icons.badge_outlined),
+                            ),
+                            const SizedBox(height: 16),
+                            AppTextField(
+                              controller: _passwordController,
+                              label: 'Contraseña',
+                              obscureText: _obscurePassword,
+                              textInputAction: TextInputAction.done,
+                              validator: (v) => Validators.notEmpty(
+                                v,
+                                message: 'Ingresa tu contraseña.',
+                              ),
+                              prefixIcon: const Icon(Icons.lock_outline),
+                              suffixIcon: TextButton(
+                                onPressed: () => setState(
+                                  () => _obscurePassword = !_obscurePassword,
+                                ),
+                                child: Text(
+                                  _obscurePassword ? 'Ver' : 'Ocultar',
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+                            BlocBuilder<AuthBloc, AuthState>(
+                              builder: (context, state) {
+                                return AppButton(
+                                  label: 'Ingresar a mi cuenta',
+                                  isLoading: state is AuthLoading,
+                                  onPressed: _submit,
+                                );
+                              },
+                            ),
+                            const SizedBox(height: 20),
+                            InkWell(
+                              borderRadius: BorderRadius.circular(12),
+                              onTap: _fillDemoAccess,
+                              child: Container(
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: AppColors.surfaceLight,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.badge_outlined,
+                                      size: 18,
+                                      color: AppColors.textSecondary,
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Acceso de demostración',
+                                            style: AppTextStyles.caption,
+                                          ),
+                                          Text(
+                                            'CI: ${AuthMockDataSource.demoIdentification} · Clave: ${AuthMockDataSource.demoPassword}',
+                                            style: AppTextStyles.bodySecondary
+                                                .copyWith(fontSize: 12.5),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Text(
+                                      'Completar datos',
+                                      style: AppTextStyles.caption.copyWith(
+                                        color: AppColors.primaryNavy,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.info_outline,
+                                  size: 14,
+                                  color: AppColors.mutedBlueGray,
+                                ),
+                                const SizedBox(width: 6),
+                                Expanded(
+                                  child: Text(
+                                    'Tus datos se utilizan únicamente para validar tu acceso.',
+                                    style: AppTextStyles.caption,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),

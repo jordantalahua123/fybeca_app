@@ -10,13 +10,16 @@ class AppTheme {
   AppTheme._();
 
   static ThemeData get light {
+    // Rojo como color de acción primaria (botones "Ingresar", "Generar
+    // código") y navy como color de marca/encabezados, igual que en el
+    // portal web de Tarjeta Empresarial.
     final colorScheme = const ColorScheme.light(
-      primary: AppColors.primaryNavy,
+      primary: AppColors.brandRed,
       onPrimary: AppColors.white,
-      secondary: AppColors.primaryBlue,
+      secondary: AppColors.primaryNavy,
       onSecondary: AppColors.white,
-      tertiary: AppColors.accentCyan,
-      onTertiary: AppColors.primaryNavy,
+      tertiary: AppColors.primaryBlue,
+      onTertiary: AppColors.white,
       error: AppColors.error,
       onError: AppColors.white,
       surface: AppColors.white,
@@ -51,7 +54,9 @@ class AppTheme {
           foregroundColor: colorScheme.onPrimary,
           minimumSize: const Size.fromHeight(52),
           textStyle: AppTextStyles.button,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
           elevation: 0,
         ),
       ),
@@ -61,7 +66,9 @@ class AppTheme {
           minimumSize: const Size.fromHeight(52),
           textStyle: AppTextStyles.button,
           side: const BorderSide(color: AppColors.border),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
         ),
       ),
       textButtonTheme: TextButtonThemeData(
@@ -73,7 +80,10 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.surfaceLight,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
@@ -93,7 +103,10 @@ class AppTheme {
         labelStyle: AppTextStyles.bodySecondary,
         hintStyle: AppTextStyles.bodySecondary,
       ),
-      dividerTheme: const DividerThemeData(color: AppColors.border, thickness: 1),
+      dividerTheme: const DividerThemeData(
+        color: AppColors.border,
+        thickness: 1,
+      ),
       snackBarTheme: SnackBarThemeData(
         backgroundColor: AppColors.primaryNavy,
         contentTextStyle: AppTextStyles.body.copyWith(color: AppColors.white),

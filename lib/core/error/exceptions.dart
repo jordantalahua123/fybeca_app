@@ -12,5 +12,7 @@ class AuthException implements Exception {
 
 class CacheException implements Exception {
   final String message;
-  const CacheException([this.message = 'No se pudo leer la información local.']);
+  const CacheException([
+    this.message = 'No se pudo leer la información local.',
+  ]);
 }
