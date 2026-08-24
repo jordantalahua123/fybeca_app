@@ -4,18 +4,20 @@ class UserModel extends UserEntity {
   const UserModel({
     required super.id,
     required super.name,
-    required super.identification,
+    required super.email,
+    required super.provider,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       id: json['id'] as String,
       name: json['name'] as String,
-      identification: json['identification'] as String,
+      email: json['email'] as String,
+      provider: AuthProvider.values.byName(json['provider'] as String),
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {'id': id, 'name': name, 'identification': identification};
+    return {'id': id, 'name': name, 'email': email, 'provider': provider.name};
   }
 }

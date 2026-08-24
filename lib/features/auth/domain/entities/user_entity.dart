@@ -1,18 +1,22 @@
 import 'package:equatable/equatable.dart';
 
-/// Empleado autenticado. El acceso es corporativo (cédula + clave asignada
-/// por Fybeca), no hay autoregistro ni proveedores externos.
+enum AuthProvider { email, google, microsoft }
+
+/// Empleado autenticado con su correo corporativo (o una cuenta federada de
+/// Google/Microsoft asociada a Fybeca).
 class UserEntity extends Equatable {
   final String id;
   final String name;
-  final String identification;
+  final String email;
+  final AuthProvider provider;
 
   const UserEntity({
     required this.id,
     required this.name,
-    required this.identification,
+    required this.email,
+    required this.provider,
   });
 
   @override
-  List<Object?> get props => [id, name, identification];
+  List<Object?> get props => [id, name, email, provider];
 }

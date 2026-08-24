@@ -7,8 +7,12 @@ import '../../../../core/utils/validators.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_logo.dart';
 import '../../../../core/widgets/app_text_field.dart';
-import '../../data/datasources/auth_remote_data_source.dart';
+import '../../../../core/widgets/brand_icons.dart';
 import '../bloc/auth_bloc.dart';
+import '../widgets/auth_divider.dart';
+import '../widgets/social_login_button.dart';
+import 'google_auth_flow_page.dart';
+import 'microsoft_auth_flow_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -19,37 +23,44 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final _identificationController = TextEditingController();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
 
   @override
   void dispose() {
-    _identificationController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
-  }
-
-  void _fillDemoAccess() {
-    _identificationController.text = AuthMockDataSource.demoIdentification;
-    _passwordController.text = AuthMockDataSource.demoPassword;
   }
 
   void _submit() {
     if (_formKey.currentState?.validate() ?? false) {
       context.read<AuthBloc>().add(
-        AuthLoginRequested(
-          identification: _identificationController.text.trim(),
+        AuthLoginWithEmailRequested(
+          email: _emailController.text.trim(),
           password: _passwordController.text,
         ),
       );
     }
   }
 
+  void _continueWithGoogle() {
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => const GoogleAuthFlowPage()));
+  }
+
+  void _continueWithMicrosoft() {
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => const MicrosoftAuthFlowPage()));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.primaryNavy,
+      backgroundColor: AppColors.white,
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthFailureState) {
@@ -72,9 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                     Text(
                       'Tu cupo empresarial, siempre contigo.',
                       textAlign: TextAlign.center,
-                      style: AppTextStyles.body.copyWith(
-                        color: AppColors.white.withValues(alpha: 0.85),
-                      ),
+                      style: AppTextStyles.body.copyWith(color: AppColors.textSecondary),
                     ),
                     const SizedBox(height: 28),
                     Container(
@@ -85,6 +94,13 @@ class _LoginPageState extends State<LoginPage> {
                         border: Border(
                           top: BorderSide(color: AppColors.brandRed, width: 4),
                         ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.primaryNavy.withValues(alpha: 0.08),
+                            blurRadius: 24,
+                            offset: const Offset(0, 10),
+                          ),
+                        ],
                       ),
                       child: Form(
                         key: _formKey,
@@ -106,19 +122,16 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              'Usa las credenciales asociadas a tu convenio empresarial.',
+                              'Usa tu correo corporativo para continuar.',
                               style: AppTextStyles.bodySecondary,
                             ),
                             const SizedBox(height: 24),
                             AppTextField(
-                              controller: _identificationController,
-                              label: 'Número de identificación',
-                              keyboardType: TextInputType.number,
-                              validator: (v) => Validators.notEmpty(
-                                v,
-                                message: 'Ingresa tu cédula.',
-                              ),
-                              prefixIcon: const Icon(Icons.badge_outlined),
+                              controller: _emailController,
+                              label: 'Correo corporativo',
+                              keyboardType: TextInputType.emailAddress,
+                              validator: Validators.email,
+                              prefixIcon: const Icon(Icons.mail_outline),
                             ),
                             const SizedBox(height: 16),
                             AppTextField(
@@ -150,51 +163,19 @@ class _LoginPageState extends State<LoginPage> {
                                 );
                               },
                             ),
+                            const SizedBox(height: 24),
+                            const AuthDivider(),
                             const SizedBox(height: 20),
-                            InkWell(
-                              borderRadius: BorderRadius.circular(12),
-                              onTap: _fillDemoAccess,
-                              child: Container(
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  color: AppColors.surfaceLight,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Row(
-                                  children: [
-                                    const Icon(
-                                      Icons.badge_outlined,
-                                      size: 18,
-                                      color: AppColors.textSecondary,
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Acceso de demostración',
-                                            style: AppTextStyles.caption,
-                                          ),
-                                          Text(
-                                            'CI: ${AuthMockDataSource.demoIdentification} · Clave: ${AuthMockDataSource.demoPassword}',
-                                            style: AppTextStyles.bodySecondary
-                                                .copyWith(fontSize: 12.5),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Text(
-                                      'Completar datos',
-                                      style: AppTextStyles.caption.copyWith(
-                                        color: AppColors.primaryNavy,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                            SocialLoginButton(
+                              icon: const GoogleLogo(),
+                              label: 'Continuar con Google',
+                              onPressed: _continueWithGoogle,
+                            ),
+                            const SizedBox(height: 12),
+                            SocialLoginButton(
+                              icon: const MicrosoftLogo(),
+                              label: 'Continuar con Microsoft',
+                              onPressed: _continueWithMicrosoft,
                             ),
                             const SizedBox(height: 12),
                             Row(

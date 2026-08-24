@@ -136,12 +136,17 @@ class _ConvenioCard extends StatelessWidget {
           Positioned(
             top: 10,
             right: 10,
-            child: Icon(
-              selected ? Icons.check_circle : Icons.circle_outlined,
-              color: selected
-                  ? AppColors.white
-                  : AppColors.white.withValues(alpha: 0.75),
-              size: 22,
+            child: Container(
+              padding: const EdgeInsets.all(2),
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.white,
+              ),
+              child: Icon(
+                selected ? Icons.check_circle : Icons.circle_outlined,
+                color: selected ? AppColors.primaryNavy : AppColors.border,
+                size: 20,
+              ),
             ),
           ),
         ],

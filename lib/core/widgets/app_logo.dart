@@ -3,10 +3,10 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../theme/app_colors.dart';
 
-/// Insignia del logo Fybeca: fondo navy redondeado, wordmark en negrita y
-/// el tagline "Única en tu vida" en cursiva, tal como aparece en el portal
-/// de Tarjeta Empresarial. Es autocontenida (trae su propio fondo), así que
-/// se puede usar sobre cualquier color de página.
+/// Logo oficial de Fybeca (`assets/images/logo_fybeca.png`), sobre una
+/// placa blanca — el archivo trae fondo blanco opaco, no transparente, así
+/// que necesita ese respaldo para verse bien sobre el navy del login. Si el
+/// asset no está disponible, cae a un wordmark de texto simple.
 class AppLogo extends StatelessWidget {
   final double scale;
 
@@ -15,37 +15,26 @@ class AppLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: 16 * scale,
-        vertical: 10 * scale,
-      ),
+      padding: EdgeInsets.symmetric(horizontal: 20 * scale, vertical: 12 * scale),
       decoration: BoxDecoration(
-        color: AppColors.primaryNavy,
-        borderRadius: BorderRadius.circular(10 * scale),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Fybeca',
-            style: GoogleFonts.ubuntu(
-              color: AppColors.white,
-              fontSize: 22 * scale,
-              fontWeight: FontWeight.w700,
-              height: 1,
-            ),
-          ),
-          Text(
-            'Única en tu vida',
-            style: GoogleFonts.montserrat(
-              color: AppColors.white,
-              fontSize: 11 * scale,
-              fontStyle: FontStyle.italic,
-              height: 1.2,
-            ),
-          ),
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(14 * scale),
+        boxShadow: [
+          BoxShadow(color: Colors.black.withValues(alpha: 0.18), blurRadius: 14, offset: const Offset(0, 6)),
         ],
+      ),
+      child: Image.asset(
+        'assets/images/logo_fybeca.png',
+        height: 42 * scale,
+        fit: BoxFit.contain,
+        errorBuilder: (context, error, stackTrace) => Text(
+          'Fybeca',
+          style: GoogleFonts.ubuntu(
+            color: AppColors.primaryNavy,
+            fontSize: 26 * scale,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
       ),
     );
   }

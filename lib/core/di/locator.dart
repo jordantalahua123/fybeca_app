@@ -5,7 +5,9 @@ import '../../features/auth/data/datasources/auth_remote_data_source.dart';
 import '../../features/auth/data/repositories/auth_repository_impl.dart';
 import '../../features/auth/domain/repositories/auth_repository.dart';
 import '../../features/auth/domain/usecases/get_current_user.dart';
-import '../../features/auth/domain/usecases/login_with_identification.dart';
+import '../../features/auth/domain/usecases/login_with_email.dart';
+import '../../features/auth/domain/usecases/login_with_google.dart';
+import '../../features/auth/domain/usecases/login_with_microsoft.dart';
 import '../../features/auth/domain/usecases/logout.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
 import '../../features/tarjeta/data/datasources/tarjeta_remote_data_source.dart';
@@ -30,12 +32,16 @@ void setupLocator() {
     ..registerLazySingleton<AuthRepository>(
       () => AuthRepositoryImpl(remoteDataSource: sl(), localDataSource: sl()),
     )
-    ..registerLazySingleton(() => LoginWithIdentification(sl()))
+    ..registerLazySingleton(() => LoginWithEmail(sl()))
+    ..registerLazySingleton(() => LoginWithGoogle(sl()))
+    ..registerLazySingleton(() => LoginWithMicrosoft(sl()))
     ..registerLazySingleton(() => GetCurrentUser(sl()))
     ..registerLazySingleton(() => Logout(sl()))
     ..registerFactory(
       () => AuthBloc(
-        loginWithIdentification: sl(),
+        loginWithEmail: sl(),
+        loginWithGoogle: sl(),
+        loginWithMicrosoft: sl(),
         getCurrentUser: sl(),
         logout: sl(),
       ),
